@@ -213,6 +213,7 @@ resource "aws_launch_template" "AMI" {
 
     user_data = templatefile("${path.module}/user-data.sh", {
         server_port = local.Server_Port
+        Environment = var.Environment
     })
 
     lifecycle {
