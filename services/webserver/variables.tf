@@ -52,3 +52,9 @@ variable "Environment" {
     description = "Environment I am working on"
     type = string
 }
+
+variable custom_tags {
+    description = "Custom tags to set on the instances in the ASG"
+    type = map(string)
+    default = {}
+}
