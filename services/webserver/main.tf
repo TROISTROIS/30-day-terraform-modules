@@ -225,8 +225,8 @@ resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
 resource "aws_autoscaling_schedule" "scale-in-at-night" {
     count = var.enable_autoscaling ? 1 : 0
     scheduled_action_name = "${var.VPC_name}-scale-in-at-night" 
-    min_size = 1
-    max_size = 4
+    min_size = local.min_cluster_size
+    max_size = local.max_cluster_size
     desired_capacity = 1
     recurrence = "53 10 * * *"
     autoscaling_group_name = aws_autoscaling_group.ASG.name
