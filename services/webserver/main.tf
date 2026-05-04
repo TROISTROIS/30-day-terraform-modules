@@ -5,7 +5,7 @@ resource "aws_vpc" "VPC" {
     }
 }
 
-resource "aws_subnet" "Subnets" {
+resource "aws_subnet" "subnets" {
     for_each = local.subnets 
     availability_zone = data.aws_availability_zones.available.names[each.value.az_index]
     vpc_id = aws_vpc.VPC.id
