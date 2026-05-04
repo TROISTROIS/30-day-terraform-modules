@@ -3,11 +3,6 @@ output "region" {
     value = data.aws_region.current.id
 }
 
-output "AZs" {
-    description = "AZs in this region"
-    value = tolist(data.aws_availability_zones.available.names)
-}
-
 output "LoadBalancerDNS" {
     description = "Load Balancer DNS"
     value = aws_lb.ELB.dns_name

@@ -14,7 +14,7 @@ variable "newbits" {
 }
 
 variable "subnet_count" {
-    description = "The number of subnets "
+    description = "The number of subnets"
     type = number
 }
 
@@ -22,10 +22,19 @@ variable "AZs" {
     description = "The number of AZs"
     type = number
 }
-
 variable "EC2AMI" {
     description = "AMI for EC2 launch"
     type = string
+}
+
+variable "minServers" {
+    description = "Minimum number of servers"
+    type = number
+}
+
+variable "maxServers" {
+    description = "Maximum number of servers"
+    type = number
 }
 
 variable "Environment" {

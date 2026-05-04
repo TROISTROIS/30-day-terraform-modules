@@ -180,8 +180,8 @@ resource "aws_launch_template" "AMI" {
 
 resource "aws_autoscaling_group" "ASG" {
     name = "${var.VPC_name}-ASG"
-    max_size = local.max_cluster_size
-    min_size = local.min_cluster_size
+    max_size = var.maxServers
+    min_size = var.minServers
     vpc_zone_identifier = [ values(aws_subnet.subnets)[2].id, values(aws_subnet.subnets)[3].id ]
     
     launch_template {
@@ -215,8 +215,8 @@ resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
     count = var.enable_autoscaling ? 1 : 0
 
     scheduled_action_name = "${var.VPC_name}-scale-out-during-business-hours"
-    min_size = 2
-    max_size = 4
+    min_size = local.min_cluster_size
+    max_size = local.max_cluster_size
     desired_capacity = 4
     recurrence = "26 13 * * *"
     autoscaling_group_name = aws_autoscaling_group.ASG.name
