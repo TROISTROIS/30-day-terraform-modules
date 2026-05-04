@@ -248,3 +248,24 @@ resource "aws_autoscaling_group" "ASG" {
         }
 }
 }
+
+resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
+    count = var.enable_autoscaling ? 1 : 0
+
+    scheduled_action_name = "${var.VPC_name}-scale-out-during-business-hours"
+    min_size = 2
+    max_size = 4
+    desired_capacity = 4
+    recurrence = "0 9 * * *"
+    autoscaling_group_name = aws_autoscaling_group.ASG.name
+}
+
+resource "aws_autoscaling_schedule" "scale-in-at-night" {
+    count = var.enable_autoscaling ? 1 : 0
+    scheduled_action_name = "${var.VPC_name}-scale-in-at-night" 
+    min_size = 1
+    max_size = 4
+    desired_capacity = 1
+    recurrence = "0 17 * * *"
+    autoscaling_group_name = aws_autoscaling_group.ASG.name
+}
