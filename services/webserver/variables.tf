@@ -8,44 +8,24 @@ variable "VPC_CIDR" {
     type = string
 }
 
-variable "Subnet1_CIDR" {
-    description = "The Subnet1 CIDR"
-    type = string
+variable "newbits" {
+    description = "How many bits to add to the prefix"
+    type = number
 }
 
-variable "Subnet2_CIDR" {
-    description = "The Subnet2 CIDR"
-    type = string
+variable "subnet_count" {
+    description = "The number of subnets "
+    type = number
 }
 
-variable "Subnet3_CIDR" {
-    description = "The Subnet3 CIDR"
-    type = string
-}
-
-variable "Subnet4_CIDR" {
-    description = "The Subnet4 CIDR"
-    type = string
+variable "AZs" {
+    description = "The number of AZs"
+    type = number
 }
 
 variable "EC2AMI" {
     description = "AMI for EC2 launch"
     type = string
-}
-
-variable "InstanceType" {
-    description = "EC2 Instance Type"
-    type = string
-}
-
-variable "minServers" {
-    description = "Minimum number of servers"
-    type = number
-}
-
-variable "maxServers" {
-    description = "Maximum number of servers"
-    type = number
 }
 
 variable "Environment" {

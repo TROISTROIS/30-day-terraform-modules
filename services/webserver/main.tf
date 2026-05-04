@@ -5,43 +5,14 @@ resource "aws_vpc" "VPC" {
     }
 }
 
-resource "aws_subnet" "Subnet1" {
-    availability_zone = data.aws_availability_zones.available.names[0]
-    cidr_block = var.Subnet1_CIDR
+resource "aws_subnet" "Subnets" {
+    for_each = local.subnets 
+    availability_zone = data.aws_availability_zones.available.names[each.value.az_index]
     vpc_id = aws_vpc.VPC.id
+    cidr_block = each.value.cidr
     map_public_ip_on_launch = true
     tags = {
-        Name = "${var.VPC_name}-Subnet1"
-    }
-}
-
-resource "aws_subnet" "Subnet2" {
-    availability_zone = data.aws_availability_zones.available.names[1]
-    vpc_id = aws_vpc.VPC.id
-    cidr_block = var.Subnet2_CIDR
-    map_public_ip_on_launch = true
-    tags = {
-        Name = "${var.VPC_name}-Subnet2"
-    }
-}
-
-resource "aws_subnet" "Subnet3" {
-    availability_zone = data.aws_availability_zones.available.names[0]
-    cidr_block = var.Subnet3_CIDR
-    vpc_id = aws_vpc.VPC.id
-    map_public_ip_on_launch = true
-    tags = {
-        Name = "${var.VPC_name}-Subnet3"
-    }
-}
-
-resource "aws_subnet" "Subnet4" {
-    availability_zone = data.aws_availability_zones.available.names[1]
-    vpc_id = aws_vpc.VPC.id
-    cidr_block = var.Subnet4_CIDR
-    map_public_ip_on_launch = true
-    tags = {
-        Name = "${var.VPC_name}-Subnet4"
+        Name = "${var.VPC_name}-${each.key}"
     }
 }
 
@@ -62,23 +33,9 @@ resource "aws_route" "Route" {
     gateway_id = aws_internet_gateway.IGW.id
 }
 
-resource "aws_route_table_association" "ELB_Subnet1" {
-  subnet_id      = aws_subnet.Subnet1.id
-  route_table_id = aws_route_table.PublicRouteTable.id
-}
-
-resource "aws_route_table_association" "ELB_Subnet2" {
-  subnet_id      = aws_subnet.Subnet2.id
-  route_table_id = aws_route_table.PublicRouteTable.id
-}
-
-resource "aws_route_table_association" "ASG_Subnet1" {
-  subnet_id      = aws_subnet.Subnet3.id
-  route_table_id = aws_route_table.PublicRouteTable.id
-}
-
-resource "aws_route_table_association" "ASG_Subnet2" {
-  subnet_id      = aws_subnet.Subnet4.id
+resource "aws_route_table_association" "public_associations" {
+  for_each = aws_subnet.Subnets
+  subnet_id      = each.value.id
   route_table_id = aws_route_table.PublicRouteTable.id
 }
 
@@ -131,7 +88,7 @@ resource "aws_vpc_security_group_ingress_rule" "EC2_SG_ingress" {
 }
 
 resource "aws_lb" "ELB" {
-    subnets = [aws_subnet.Subnet1.id,aws_subnet.Subnet2.id]
+    subnets = [ values(aws_subnet.subnets)[0].id, values(aws_subnet.subnets)[1].id]
     security_groups = [aws_security_group.ELB_SG.id]
     name = "${var.VPC_name}-ELB"
     tags = {
@@ -204,7 +161,7 @@ resource "aws_launch_template" "AMI" {
 
     name_prefix = "AMI-"
     image_id = var.EC2AMI
-    instance_type = var.InstanceType
+    instance_type = local.InstanceType
 
     network_interfaces {
         associate_public_ip_address = true
@@ -223,9 +180,9 @@ resource "aws_launch_template" "AMI" {
 
 resource "aws_autoscaling_group" "ASG" {
     name = "${var.VPC_name}-ASG"
-    max_size = var.maxServers
-    min_size = var.minServers
-    vpc_zone_identifier = [aws_subnet.Subnet3.id, aws_subnet.Subnet4.id]
+    max_size = local.max_cluster_size
+    min_size = local.min_cluster_size
+    vpc_zone_identifier = [ values(aws_subnet.subnets)[2].id, values(aws_subnet.subnets)[3].id ]
     
     launch_template {
         id = aws_launch_template.AMI.id
@@ -261,7 +218,7 @@ resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
     min_size = 2
     max_size = 4
     desired_capacity = 4
-    recurrence = "0 9 * * *"
+    recurrence = "26 13 * * *"
     autoscaling_group_name = aws_autoscaling_group.ASG.name
 }
 
@@ -271,6 +228,6 @@ resource "aws_autoscaling_schedule" "scale-in-at-night" {
     min_size = 1
     max_size = 4
     desired_capacity = 1
-    recurrence = "0 17 * * *"
+    recurrence = "53 10 * * *"
     autoscaling_group_name = aws_autoscaling_group.ASG.name
 }
