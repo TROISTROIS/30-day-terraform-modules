@@ -4,10 +4,10 @@ resource "aws_iam_user" "IAMuser" {
 
 resource "aws_iam_policy" "cloudwatch_read_only" {
     name = "cloudwatch-read-only"
-    policy = data.aws_iam_policy_document.cloudwatch_read_only.json
+    policy = data.aws_iam_policy_document.cloudwatch_read_only_policy.json
 }
 
-data "aws_iam_policy_document" "cloudwatch_read_only" {
+data "aws_iam_policy_document" "cloudwatch_read_only_policy" {
     statement {
         effect = "Allow"
         actions = [
@@ -21,10 +21,10 @@ data "aws_iam_policy_document" "cloudwatch_read_only" {
 
 resource "aws_iam_policy" "cloudwatch_full_access" {
     name = "cloudwatch-full-access"
-    policy = data.aws_iam_policy_document.cloudwatch_full_access.json
+    policy = data.aws_iam_policy_document.cloudwatch_full_access_policy.json
     }
 
-data "aws_iam_policy_document" "cloudwatch_full_access" {
+data "aws_iam_policy_document" "cloudwatch_full_access_policy" {
     statement {
         effect = "Allow"
         actions = ["cloudwatch:*"]
