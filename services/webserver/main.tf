@@ -217,8 +217,8 @@ resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
     scheduled_action_name = "${var.VPC_name}-scale-out-during-business-hours"
     min_size = local.min_cluster_size
     max_size = local.max_cluster_size
-    desired_capacity = 4
-    recurrence = "26 13 * * *"
+    desired_capacity = 3
+    recurrence = "30 12 * * *"
     autoscaling_group_name = aws_autoscaling_group.ASG.name
 }
 
@@ -228,6 +228,6 @@ resource "aws_autoscaling_schedule" "scale-in-at-night" {
     min_size = local.min_cluster_size
     max_size = local.max_cluster_size
     desired_capacity = 1
-    recurrence = "53 10 * * *"
+    recurrence = "32 12 * * *"
     autoscaling_group_name = aws_autoscaling_group.ASG.name
 }
