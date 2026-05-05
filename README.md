@@ -8,6 +8,8 @@ The modules are organized by service and infrastructure domain.
 
 ```text
 modules/
+├── landing-zone/
+│   └── iam-user/        - IAM user creation and dynamic policy attachment
 ├── services/
 │   ├── webserver/       - Web server and related infrastructure resources
 │   └── ...              - Additional services
