@@ -40,6 +40,11 @@ variable "maxServers" {
 variable "Environment" {
     description = "Environment I am working on"
     type = string
+
+    validation {
+        condition = contains(["Stage", "Production"], var.Environment)
+        error_message = "Environment must be Stage or Production. "
+    }
 }
 
 variable custom_tags {

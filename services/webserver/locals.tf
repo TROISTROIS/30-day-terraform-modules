@@ -5,9 +5,10 @@ locals {
     tcp_protocol = "tcp"
     http_protocol = "HTTP"
     any_protocol = "-1"
-    InstanceType = var.Environment == "Production" ? "t2.micro" : "t2.nano"
-    min_cluster_size = var.Environment == "Production" ? 3 : 1
-    max_cluster_size = var.Environment == "Production" ? 5 : 2
+    is_production = var.Environment == "Production"
+    InstanceType = local.is_production ? "t2.micro" : "t2.nano"
+    min_cluster_size = local.is_production ? 3 : 1
+    max_cluster_size = local.is_production ? 5 : 3
     subnets = {
         for i in range(var.subnet_count):
         "Subnet${i+1}" => {
