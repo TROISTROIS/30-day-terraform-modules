@@ -8,6 +8,7 @@ The modules are organized by service and infrastructure domain.
 
 ```text
 modules/
+├── backend/             - S3 and DynamoDB resources for Terraform remote state management
 ├── landing-zone/
 │   └── iam-user/        - IAM user creation and dynamic policy attachment
 ├── services/
