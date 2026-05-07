@@ -194,6 +194,13 @@ resource "aws_autoscaling_group" "ASG" {
     health_check_type = "ELB"
     health_check_grace_period = 300
 
+    instance_refresh {
+      strategy = "Rolling"
+      preferences {
+        min_healthy_percentage = 50
+      }
+    }
+
     tag {
         key = "Name"
         value = "${var.VPC_name}-ASG"
