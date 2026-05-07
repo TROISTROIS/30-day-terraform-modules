@@ -181,11 +181,12 @@ resource "aws_launch_template" "AMI" {
 }
 
 resource "aws_autoscaling_group" "ASG" {
-    name = "${var.VPC_name}-ASG"
+    name = "${var.VPC_name}-${aws_launch_template.AMI.name}"
     max_size = var.maxServers
     min_size = var.minServers
     vpc_zone_identifier = [ values(aws_subnet.subnets)[2].id, values(aws_subnet.subnets)[3].id ]
-    
+    # wait for this many instances to pass health checks before considering ASG deployment complete
+    min_elb_capacity = var.minServers
     launch_template {
         id = aws_launch_template.AMI.id
         version = "$Latest"
@@ -193,11 +194,16 @@ resource "aws_autoscaling_group" "ASG" {
     target_group_arns = [aws_lb_target_group.LBTargetGroup.arn]
     health_check_type = "ELB"
     health_check_grace_period = 300
+    lifecycle {
+      create_before_destroy = true
+    }
+
     tag {
         key = "Name"
         value = "${var.VPC_name}-ASG"
         propagate_at_launch = true
     }
+    
     dynamic "tag" {
         for_each = {
             for key, value in var.custom_tags:
