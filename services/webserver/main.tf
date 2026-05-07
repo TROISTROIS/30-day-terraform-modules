@@ -188,7 +188,7 @@ resource "aws_autoscaling_group" "ASG" {
 
     launch_template {
         id = aws_launch_template.AMI.id
-        version = "$Latest"
+        version = aws_launch_template.AMI.latest_version
     }
     target_group_arns = [aws_lb_target_group.LBTargetGroup.arn]
     health_check_type = "ELB"
