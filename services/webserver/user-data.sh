@@ -8,10 +8,6 @@ LOCAL_IP=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/lat
 
 cat > index.html <<EOF
 <h1>${server_text}This is ${day} !</h1>
-<p><strong>Instance ID:</strong> $INSTANCE_ID</p>
-<p><strong>Internal IP:</strong> $LOCAL_IP</p>
-<p><strong>Server Port:</strong> ${server_port}</p>
-<p><em>Testing Version: v0.0.4-beta</em></p>
 EOF
 
 nohup busybox httpd -f -p ${server_port} &
