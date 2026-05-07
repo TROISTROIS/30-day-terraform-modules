@@ -47,6 +47,11 @@ variable "Environment" {
     }
 }
 
+variable "day" {
+    description = "The day of the challenge"
+    type = string
+}
+
 variable custom_tags {
     description = "Custom tags to set on the instances in the ASG"
     type = map(string)
@@ -56,4 +61,16 @@ variable custom_tags {
 variable "enable_autoscaling" {
     description = "If set to true, enable autoscaling"
     type = bool
+}
+
+variable "ami" {
+    description = "The AMI of the EC2 instances to launch"
+    type = string
+    default = "ami-0ec10929233384c7f"
+}
+ 
+variable "server_text" {
+    description = "The text the web server should return"
+    type = string
+    default = "Hello World from Terraform !!"
 }
