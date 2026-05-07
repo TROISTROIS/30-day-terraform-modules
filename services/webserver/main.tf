@@ -160,7 +160,7 @@ resource "aws_vpc_security_group_egress_rule" "EC2_allow_all_outbound" {
 resource "aws_launch_template" "AMI" {
 
     name_prefix = "AMI-"
-    image_id = var.EC2AMI
+    image_id = var.ami
     instance_type = local.InstanceType
 
     network_interfaces {
@@ -171,6 +171,8 @@ resource "aws_launch_template" "AMI" {
     user_data = base64encode(templatefile("${path.module}/user-data.sh", {
         server_port = local.Server_Port
         Environment = var.Environment
+        server_text = var.server_text
+        day = var.day
     }))
 
     lifecycle {
