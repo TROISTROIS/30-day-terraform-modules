@@ -52,6 +52,7 @@ module "webserver" {
 *   **Versioning:** Always pin module versions in production environments to prevent unintended updates from breaking your infrastructure.
 *   **Documentation:** Ensure that each module within the subdirectories has its own `README.md` detailing input variables, outputs, and usage examples.
 *   **Encapsulation:** Keep modules focused on a single responsibility or a closely related group of resources.
+*   **Secure data handling:** When modules accept secrets or credentials, mark inputs and outputs as sensitive and reference them from secure stores such as AWS Secrets Manager.
 
 ## Development
 
