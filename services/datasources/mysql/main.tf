@@ -6,5 +6,5 @@ resource "aws_db_instance" "RDS_day13" {
     skip_final_snapshot = true
     db_name = var.dbname
     username = var.db_username
-    password = var.db_username
+    password = var.db_password
 }
