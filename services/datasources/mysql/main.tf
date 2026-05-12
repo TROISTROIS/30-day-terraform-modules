@@ -5,6 +5,6 @@ resource "aws_db_instance" "RDS_day13" {
     instance_class = local.InstanceType
     skip_final_snapshot = true
     db_name = var.dbname
-    username = local.db_credentials.username
-    password = local.db_credentials.password
+    username = var.db_username
+    password = var.db_username
 }
