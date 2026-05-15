@@ -1,10 +1,22 @@
-resource "aws_db_instance" "RDS_day13" {
+terraform {
+  required_providers {
+    aws = {
+        source = "hashicorp/aws"
+        version = "~> 4.0 "
+    }
+  }
+}
+
+resource "aws_db_instance" "RDS_instance" {
     identifier_prefix = var.prefix
-    engine = var.RDS_engine
     allocated_storage = local.storage
     instance_class = local.InstanceType
     skip_final_snapshot = true
-    db_name = var.dbname
-    username = var.db_username
-    password = var.db_password
+    backup_retention_period = var.backup_retention_period
+
+    replicate_source_db = var.replicate_source_db
+    engine = var.replicate_source_db == null ? var.RDS_engine : null
+    db_name = var.replicate_source_db ==  null ? var.dbname : null
+    username = var.replicate_source_db == null ? var.db_username : null
+    password = var.replicate_source_db == null ? var.db_password : null
 }
