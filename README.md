@@ -13,6 +13,7 @@ modules/
 │   └── iam-user/        - IAM user creation and dynamic policy attachment
 ├── services/
 │   ├── webserver/       - Web server and related infrastructure resources
+│   ├── datasources/mysql/ - Data source module used for multi-region RDS deployment across staging and production
 │   └── ...              - Additional services
 ```
 
@@ -45,6 +46,16 @@ module "webserver" {
   environment   = "production"
 }
 ```
+
+When using modules across multiple providers, pass an aliased provider explicitly into the module:
+
+```hcl
+providers = {
+  aws = aws.primary
+}
+```
+
+This is especially useful for multi-region deployments where the same module target is used in different AWS regions.
 
 ## Best Practices
 
