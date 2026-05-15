@@ -7,6 +7,16 @@ terraform {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias = "primary"
+}
+
+provider "aws" {
+  region = "us-west-1"
+  alias = "secondary"
+}
+
 resource "aws_db_instance" "RDS_instance" {
     identifier_prefix = var.prefix
     allocated_storage = local.storage
