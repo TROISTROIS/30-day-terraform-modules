@@ -11,6 +11,7 @@ modules/
 ├── backend/             - S3 and DynamoDB resources for Terraform remote state management
 ├── landing-zone/
 │   └── iam-user/        - IAM user creation and dynamic policy attachment
+├── multi-account/       - Shared infrastructure and provider-aware deployments across multiple AWS accounts
 ├── services/
 │   ├── webserver/       - Web server and related infrastructure resources
 │   ├── datasources/mysql/ - Data source module used for multi-region RDS deployment across staging and production
@@ -55,7 +56,7 @@ providers = {
 }
 ```
 
-This is especially useful for multi-region deployments where the same module target is used in different AWS regions.
+This is especially useful for multi-region deployments where the same module target is used in different AWS regions or across multiple AWS accounts.
 
 ## Best Practices
 
