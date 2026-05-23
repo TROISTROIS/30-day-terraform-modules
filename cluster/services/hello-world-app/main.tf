@@ -24,7 +24,7 @@ module "asg" {
   health_check_type = "ELB"
   user_data = templatefile("${path.module}/user-data.sh", {
       server_port = local.Server_Port
-      environment = var.Environment
+      environment = var.environment
       server_text = var.server_text
       day = var.day
   })
