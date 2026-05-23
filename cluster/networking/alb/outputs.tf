@@ -8,7 +8,7 @@ output "elb_sg_id" {
   value = aws_security_group.ELB_SG.id
 }
 
-output "target_group_arn" {
-  description = "The ARN of the target group"
-  value = aws_lb_target_group.LBTargetGroup.arn
+output "elb_http_listener_arn" {
+  description = "The ARN of the ELB http listener"
+  value = aws_lb_listener.ELB_Listener.arn
 }

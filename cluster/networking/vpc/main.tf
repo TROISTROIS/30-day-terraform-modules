@@ -1,7 +1,16 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 resource "aws_vpc" "VPC" {
     cidr_block = var.VPC_CIDR
     tags = {
-        Name = "${var.VPC_name}"
+        Name = "${var.environment}-VPC"
     }
 }
 
@@ -19,7 +28,7 @@ resource "aws_subnet" "subnets" {
 resource "aws_internet_gateway" "IGW" {
     vpc_id = aws_vpc.VPC.id
     tags = {
-        Name = "${var.VPC_name}-IGW"
+        Name = "${var.environment}-IGW"
     }
 }
 
@@ -38,3 +47,5 @@ resource "aws_route_table_association" "public_associations" {
   subnet_id      = each.value.id
   route_table_id = aws_route_table.PublicRouteTable.id
 }
+
+

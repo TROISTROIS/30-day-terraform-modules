@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 resource "aws_security_group" "ELB_SG" {
     description = "ELB security group"
     name = "${var.environment}-ELB_SG"
@@ -54,28 +63,6 @@ resource "aws_lb" "ELB" {
     }
 }
 
-resource "aws_lb_target_group" "LBTargetGroup" {
-    name = "${var.environment}-LBTargetGroup"
-    port = local.Server_Port
-    protocol = local.http_protocol
-    vpc_id = var.vpc_id
-
-    health_check {
-        path = "/"
-        protocol = local.http_protocol
-        healthy_threshold   = 2
-        unhealthy_threshold = 5
-        timeout = 3
-        interval = 15
-        matcher = "200"
-    }
-    tags = {
-        Name = "${var.environment}-LBTargetGroup"
-        Environment = var.environment
-        ManagedBy   = "Terraform"
-    }
-}
-
 resource "aws_lb_listener" "ELB_Listener" {
   load_balancer_arn = aws_lb.ELB.arn
   port              = local.ELB_Port
@@ -85,20 +72,4 @@ resource "aws_lb_listener" "ELB_Listener" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.LBTargetGroup.arn
   }
-}
-
-resource "aws_lb_listener_rule" "ELB_Listener_rule" {
-    listener_arn = aws_lb_listener.ELB_Listener.arn
-    priority = 100
-
-    condition {
-        path_pattern {
-          values = ["*"]
-        }
-    }
-
-    action {
-      type = "forward"
-      target_group_arn = aws_lb_target_group.LBTargetGroup.arn
-    }
 }
