@@ -41,7 +41,7 @@ resource "aws_launch_template" "AMI" {
         security_groups = [aws_security_group.EC2_SG.id]
     }
 
-    user_data = var.user_data
+    user_data = base64encode(var.user_data)
 
     lifecycle {
         create_before_destroy = true
