@@ -1,5 +1,5 @@
 locals {
-    IGW_destination_IP = "0.0.0.0./0"
+    IGW_destination_IP = "0.0.0.0/0"
     http_protocol = "HTTP"
     Server_Port = 8080
     subnets = {
