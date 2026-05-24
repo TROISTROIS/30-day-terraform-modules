@@ -1,14 +1,14 @@
 module "asg" {
   source = "../../../cluster/asg-rolling-deploy"
 
-  vpc_id = var.vpc_id
+  vpc_id = module.vpc.vpc_id
   environment = var.environment
-  elb_sg_id = var.elb_sg_id
+  elb_sg_id = module.elb.elb_sg_id
   ami = var.ami
   day = var.day
   minServers = var.minServers
   maxServers = var.maxServers
-  subnet_ids = var.subnet_ids
+  subnet_ids = module.vpc.subnet_ids
   target_group_arns = [aws_lb_target_group.LBTargetGroup.arn]
   custom_tags = var.custom_tags
   enable_autoscaling = var.enable_autoscaling
@@ -24,10 +24,10 @@ module "asg" {
 module "elb" {
   source = "../../../cluster/networking/alb" 
   
-  vpc_id = var.vpc_id
+  vpc_id = module.vpc.vpc_id
   environment = var.environment
-  subnet_ids = var.subnet_ids
-  ec2_sg_id = var.ec2_sg_id
+  subnet_ids = module.vpc.subnet_ids
+  ec2_sg_id = module.asg.ec2_sg_id
 }
 
 module "vpc" {
@@ -44,7 +44,7 @@ resource "aws_lb_target_group" "LBTargetGroup" {
     name = "${var.environment}-LBTargetGroup"
     port = local.Server_Port
     protocol = local.http_protocol
-    vpc_id = var.vpc_id
+    vpc_id = module.vpc.vpc_id
 
     health_check {
         path = "/"

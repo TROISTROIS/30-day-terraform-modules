@@ -1,21 +1,11 @@
-variable "vpc_id" {
-    description = "The ID of the VPC"
-    type = string
-}
-
 variable "environment" {
     description = "Environment I am working on"
     type = string
 
     validation {
-        condition = contains(["Stage", "Production"], var.environment)
+        condition = contains(["Stage", "Production", "Test"], var.environment)
         error_message = "Environment must be Stage or Production. "
     }
-}
-
-variable "elb_sg_id" {
-    description = "The ID of the security group of the load balancer"
-    type = string
 }
 
 variable "ami" {
@@ -43,11 +33,6 @@ variable "minServers" {
 variable "maxServers" {
     description = "Maximum number of servers that the ASG spins up"
     type = number
-}
-
-variable "subnet_ids" {
-  type        = list(string)
-  description = "List of subnet ids from the VPC module for the ELB and the ASG"
 }
 
 variable "VPC_CIDR" {
@@ -91,9 +76,4 @@ variable "user_data" {
     description = "The use data script to run in each instance during boot"
     type = string
     default = null
-}
-
-variable "ec2_sg_id" {
-    description = "The ID of the EC2 instance's security group"
-    type = string
 }
