@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
-
 resource "aws_security_group" "EC2_SG" {
     description = "Security group for the instances"
     vpc_id = var.vpc_id

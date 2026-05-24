@@ -1,12 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
-
 resource "aws_security_group" "ELB_SG" {
     description = "ELB security group"
     name = "${var.environment}-ELB_SG"
@@ -69,7 +60,14 @@ resource "aws_lb_listener" "ELB_Listener" {
   protocol          = local.http_protocol
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.LBTargetGroup.arn
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "404 Not Found"
+      status_code  = "404"
+    }
   }
 }
+
+
+
