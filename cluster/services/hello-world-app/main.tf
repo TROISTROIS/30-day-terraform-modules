@@ -38,6 +38,7 @@ module "vpc" {
   newbits = var.newbits
   subnet_count = var.subnet_count
   AZs = var.AZs
+  day = var.day
 }
 
 resource "aws_lb_target_group" "LBTargetGroup" {
@@ -55,11 +56,9 @@ resource "aws_lb_target_group" "LBTargetGroup" {
         interval = 15
         matcher = "200"
     }
-    tags = {
+    tags = merge(local.common_tags, {
         Name = "${var.environment}-LBTargetGroup"
-        Environment = var.environment
-        ManagedBy   = "Terraform"
-    }
+    })
 }
 
 resource "aws_lb_listener_rule" "ELB_Listener_rule" {
