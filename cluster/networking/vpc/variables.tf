@@ -27,3 +27,8 @@ variable "AZs" {
     description = "The number of AZs"
     type = number
 }
+
+variable "day" {
+    description = "The day of the challenge"
+    type = number
+}

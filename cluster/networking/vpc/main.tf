@@ -1,8 +1,8 @@
 resource "aws_vpc" "VPC" {
     cidr_block = var.VPC_CIDR
-    tags = {
+    tags = merge(local.common_tags, {
         Name = "${var.environment}-VPC"
-    }
+    })
 }
 
 resource "aws_subnet" "subnets" {
@@ -11,9 +11,9 @@ resource "aws_subnet" "subnets" {
     vpc_id = aws_vpc.VPC.id
     cidr_block = each.value.cidr
     map_public_ip_on_launch = true
-    tags = {
+    tags = merge(local.common_tags, {
         Name = each.key
-    }
+    })
 }
 
 resource "aws_internet_gateway" "IGW" {

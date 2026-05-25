@@ -5,4 +5,9 @@ locals {
     tcp_protocol = "tcp"
     http_protocol = "HTTP"
     any_protocol = "-1"
+    common_tags = {
+        environment = var.environment
+        ManagedBy = "terraform"
+        Project = "Day-${var.day}"
+    }
 }
