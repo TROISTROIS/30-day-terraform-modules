@@ -6,7 +6,12 @@ locals {
     http_protocol = "HTTP"
     any_protocol = "-1"
     is_production = var.environment == "Production"
-    InstanceType = local.is_production ? "t2.micro" : "t2.nano"
+    InstanceType = local.is_production ? "t3.small" : "t3.micro"
     min_cluster_size = local.is_production ? 3 : 1
     max_cluster_size = local.is_production ? 5 : 3
+    common_tags = {
+        environment = var.environment
+        ManagedBy = "terraform"
+        Project = "Day-${var.day}"
+    }
 }

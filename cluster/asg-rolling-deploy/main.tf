@@ -2,11 +2,10 @@ resource "aws_security_group" "EC2_SG" {
     description = "Security group for the instances"
     vpc_id = var.vpc_id
     name = "${var.environment}-EC2-SG"
-    tags = {
+    tags = merge(local.common_tags, {
         Name = "${var.environment}-EC2-SG"
-        Environment = var.environment
-        ManagedBy = "Terraform"
     }
+    )
 }
 
 resource "aws_vpc_security_group_ingress_rule" "EC2_SG_ingress" {
@@ -16,11 +15,10 @@ resource "aws_vpc_security_group_ingress_rule" "EC2_SG_ingress" {
     to_port = local.Server_Port
     ip_protocol = local.tcp_protocol
     security_group_id = aws_security_group.EC2_SG.id
-    tags = {
+    tags = merge(local.common_tags, {
         Name = "${var.environment}-EC2-Ingress"
-        Environment = var.environment
-        ManagedBy = "Terraform"
     }
+    )
 }
 
 resource "aws_vpc_security_group_egress_rule" "EC2_allow_all_outbound" {
@@ -45,6 +43,10 @@ resource "aws_launch_template" "AMI" {
 
     lifecycle {
         create_before_destroy = true
+        precondition {
+          condition = data.aws_ec2_instance_type.instance.free_tier_eligible
+          error_message = "${local.InstanceType} is not part of the AWS Free Tier"
+        }
     }
 }
 
@@ -61,6 +63,13 @@ resource "aws_autoscaling_group" "ASG" {
     target_group_arns = var.target_group_arns
     health_check_type = var.health_check_type
     health_check_grace_period = 300
+
+    lifecycle {
+        postcondition {
+          condition = length(self.availability_zones) > 1
+          error_message = "You must use more than 1 AZ for high availability"
+        }
+    }
 
     instance_refresh {
       strategy = "Rolling"
