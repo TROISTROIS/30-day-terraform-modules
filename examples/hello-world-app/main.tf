@@ -32,6 +32,7 @@ module "elb" {
   environment = "Test"
   subnet_ids = module.vpc.subnet_ids
   ec2_sg_id = module.asg.ec2_sg_id
+  day = 16
 }
 
 module "vpc" {
@@ -42,6 +43,7 @@ module "vpc" {
   newbits = 8
   subnet_count = 4
   AZs = 2
+  day = 16
 }
 
 resource "aws_lb_target_group" "LBTargetGroup" {

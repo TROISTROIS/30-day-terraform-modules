@@ -9,6 +9,7 @@ module "elb" {
     environment = "Test"
     subnet_ids = data.aws_subnets.default.ids
     ec2_sg_id = aws_security_group.EC2_SG.id
+    day = 16
 }
 
 data "aws_vpc" "default" {

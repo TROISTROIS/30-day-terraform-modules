@@ -10,4 +10,5 @@ module "vpc" {
     newbits = 8
     subnet_count = 4
     AZs = 2
+    day = 16
 }
