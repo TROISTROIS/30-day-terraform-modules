@@ -1,3 +1,11 @@
+module "backend" {
+  source = "../../../backend"
+  s3-backend-bucket = var.bucket
+  dynamodb-backend-table = var.dynamodb
+  environment = var.environment
+  day = var.day
+}
+
 module "asg" {
   source = "../../../cluster/asg-rolling-deploy"
 
@@ -11,7 +19,7 @@ module "asg" {
   subnet_ids = module.vpc.subnet_ids
   target_group_arns = [aws_lb_target_group.LBTargetGroup.arn]
   custom_tags = var.custom_tags
-  enable_autoscaling = var.enable_autoscaling
+  enable_autoscaling = local.enable_autoscaling
   health_check_type = "ELB"
   user_data = templatefile("${path.module}/user-data.sh", {
       server_port = local.Server_Port
@@ -22,12 +30,13 @@ module "asg" {
 }
 
 module "elb" {
-  source = "../../../cluster/networking/alb" 
+  source = "../../../cluster/networking/elb" 
   
   vpc_id = module.vpc.vpc_id
   environment = var.environment
   subnet_ids = module.vpc.subnet_ids
   ec2_sg_id = module.asg.ec2_sg_id
+  day = var.day
 }
 
 module "vpc" {
