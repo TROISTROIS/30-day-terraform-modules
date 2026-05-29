@@ -2,6 +2,9 @@
 resource "aws_s3_bucket" "terraform_state_bucket" {
     bucket = var.s3-backend-bucket
     force_destroy = true
+    tags = merge(local.common_tags, {
+        Name = "${var.environment}-state-bucket"
+    })
 }
 
 # 2. Enable versioning on the bucket
@@ -40,4 +43,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
       name = "LockID"
       type = "S"
     }
+    tags = merge(local.common_tags, {
+        Name = "${var.environment}-state-dynamodb"
+    })
 }
