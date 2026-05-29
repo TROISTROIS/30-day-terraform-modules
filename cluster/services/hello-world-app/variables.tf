@@ -1,3 +1,13 @@
+variable "bucket" {
+    description = "The name of the backend S3 state bucket"
+    type = string
+}
+
+variable "dynamodb" {
+    description = "The name of the backend Dynamodb table for state"
+    type = string
+}
+
 variable "environment" {
     description = "Environment I am working on"
     type = string
@@ -22,7 +32,7 @@ variable "server_text" {
 
 variable "day" {
     description = "The day of the challenge"
-    type = string
+    type = number
 }
 
 variable "minServers" {
