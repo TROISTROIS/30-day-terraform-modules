@@ -105,8 +105,8 @@ resource "aws_autoscaling_schedule" "scale_out_during_business_hours" {
     scheduled_action_name = "${var.environment}-scale-out-during-business-hours"
     min_size = local.min_cluster_size
     max_size = local.max_cluster_size
-    desired_capacity = 3
-    recurrence = "30 12 * * *"
+    desired_capacity = 5
+    recurrence = "20 12 * * *"
     autoscaling_group_name = aws_autoscaling_group.ASG.name
 }
 
@@ -115,8 +115,8 @@ resource "aws_autoscaling_schedule" "scale-in-at-night" {
     scheduled_action_name = "${var.environment}-scale-in-at-night" 
     min_size = local.min_cluster_size
     max_size = local.max_cluster_size
-    desired_capacity = 1
-    recurrence = "32 12 * * *"
+    desired_capacity = 3
+    recurrence = "30 13 * * *"
     autoscaling_group_name = aws_autoscaling_group.ASG.name
 }
 
