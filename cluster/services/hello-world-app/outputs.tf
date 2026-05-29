@@ -17,3 +17,13 @@ output "asg_name" {
     description = "The name of the name of the auto-scaling group"
     value = module.asg.asg_name
 }
+
+output "state_bucket" {
+    description = "The name of the S3 backend state bucket"
+    value = module.backend.state-s3-bucket-name
+}
+
+output "state-dynamodb-table" {
+    description = "The name of the state dynamodb table"
+    value = module.backend.state-dynamodb-table
+}
